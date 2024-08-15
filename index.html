@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <a href="#">
+            <h1>Tic Tac Toe</h1>
+        </a>
+    </header>
+    <div class="game-information hidden" data-turn="X">
+        <p></p>
+        <button>Play Again</button>
+    </div>
+    <section class="game-board hidden">
+        <div class="hidden">
+            <div class="winner-div">
+                <p class="winner-p"></p>
+                <button>Play Again</button>
+            </div>
+        </div>
+        <div class="box-X" data-id="1"></div>
+        <div class="box-X" data-id="2"></div>
+        <div class="box-X" data-id="3"></div>
+        <div class="box-X" data-id="4"></div>
+        <div class="box-X" data-id="5"></div>
+        <div class="box-X" data-id="6"></div>
+        <div class="box-X" data-id="7"></div>
+        <div class="box-X" data-id="8"></div>
+        <div class="box-X" data-id="9"></div>
+    </section>
+    <form action="">
+        <div class="form-inputs">
+            <div class="input-label">
+                <label for="x-name">X</label>
+                <input type="text" name="x-name" id="x-name" placeholder="Enter your name" required>
+            </div>
+            <div class="input-label">
+                <label for="o-name">O</label>
+                <input type="text" name="o-name" id="o-name" placeholder="Enter your name" required>
+            </div>
+        </div>
+        <button type="submit">Start game</button>
+    </form>
+    
+</body>
+</html>

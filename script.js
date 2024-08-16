@@ -89,6 +89,7 @@ function FrontEnd() {
         form.classList.add('form-slide')
         setTimeout(() => form.classList.add('hidden'), 900);
         setTimeout(() => board.classList.remove('hidden'), 905);
+        board.classList.add('board-slide')
         board.addEventListener('click', listener )
         PubSub.on('Winner', [stop, updateInfo, colorBoxes])
     }

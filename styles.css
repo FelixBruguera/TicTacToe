@@ -50,7 +50,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     height: 28dvh;
-    padding: 2.5%;
+    padding-top: 2.5%;
     z-index: 0;
 }
 .box-X, .box-O {
@@ -194,10 +194,12 @@ label {
 }
 @keyframes slide-in {
     0% { 
-        transform: translateX(-100%);
+        /* transform: translateX(-100%); */
+        opacity: 0%;
     }
     100% {
-        transform: translateX(0);
+        /* transform: translateX(0); */
+        opacity: 100%;
     }
 }
 .clear-anim {
@@ -216,6 +218,15 @@ label {
         width: fit-content;
     }
     .game-board {
+        width: 100%;
+    }
+    input {
+        width: 80%;
+    }
+    .box-O, .box-X {
+        font-size: 12rem;
+    }
+    .game-information {
         width: 100%;
     }
 }

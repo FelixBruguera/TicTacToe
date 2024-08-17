@@ -28,7 +28,7 @@ function Gameboard() {
         if (!allPlays.includes(play)) {
             if (board[obj.player] == undefined) {board[obj.player] = []} 
             board[obj.player].push(play)
-            PubSub.emit('validPlay', {player: obj.player, event: obj.event})
+            PubSub.emit('validPlay', {player: obj.player, event: obj.event, allPlays: getBoard().length})
         }
     }
     PubSub.on('newPlay', addPlay)
@@ -43,7 +43,7 @@ function Player(symbol, playerName) {
     return {getSymbol, getName}
 }
 
-const GameStatus = (function(board) {
+const GameStatus = (function(board, allPlays) {
     const combinations = [[1,2,3], [4,5,6], [7,8,9], [7,4,1], [8,5,2], [9,6,3], [7,5,3], [1,5,9]]
     let matchCount = 0
     let winner = 'noWinner'
@@ -54,6 +54,7 @@ const GameStatus = (function(board) {
         if (matchCount == 3) {winner = combination}
         matchCount = 0
     })
+    if (allPlays == 9 & winner == 'noWinner') { winner = 'Draw' }
     return winner
 })
 
@@ -64,10 +65,13 @@ function Play(players) {
     front.start()
     function checkWinner(obj) {
         let plays = board.getPlays(obj.player)
-        let winnerCheck = GameStatus(plays)
+        let winnerCheck = GameStatus(plays, obj.allPlays)
         let player = playerList.filter(elem => elem.getSymbol() == obj.player)[0]
         if (Array.isArray(winnerCheck)) { 
-            PubSub.emit('Winner', { player: player, combination: winnerCheck})
+            PubSub.emit('Winner', { player: player, combination: winnerCheck, draw: false})
+        }
+        if (winnerCheck == 'Draw') {
+            PubSub.emit('Winner', { player: player, combination: winnerCheck, draw: true})
         }
     }
     function clearBoard() {
@@ -100,7 +104,8 @@ function FrontEnd() {
     updateInfo = (obj) => { 
         let playAgain = document.querySelector('.game-information > button')
         let winnerP = document.querySelector('.game-information > p')
-        winnerP.textContent = `${obj.player.getName()} Won!`
+        if (obj.draw == true) { winnerP.textContent = "It's a draw!" }
+        else { winnerP.textContent = `${obj.player.getName()} Won!` } 
         playAgain.addEventListener('click', () => {
             let data = new FormData(document.querySelector('form'))
             PubSub.emit('newGame')
@@ -133,9 +138,11 @@ function FrontEnd() {
     updateBoxes = () => {
         boxes.forEach(box => box.classList.toggle('box-O'))}
     colorBoxes = (obj) => {
-        winnerBoxes = Array.from(boxes).filter(box => (obj.combination.includes(parseInt(box.dataset.id))))
-        if (obj.player.getSymbol() == 'X') {winnerBoxes.forEach(box => box.classList.add('winner-X'))}
-        else {winnerBoxes.forEach(box => box.classList.add('winner-O'))}
+        if (!obj.draw == true) {
+            winnerBoxes = Array.from(boxes).filter(box => (obj.combination.includes(parseInt(box.dataset.id))))
+            if (obj.player.getSymbol() == 'X') {winnerBoxes.forEach(box => box.classList.add('winner-X'))}
+            else {winnerBoxes.forEach(box => box.classList.add('winner-O'))}
+        }
     }
     clear = () => {
         info.classList.add('hidden')
